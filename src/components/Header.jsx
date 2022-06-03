@@ -158,15 +158,26 @@ const Header = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+            {/* <Button
+                key='Feed'
+                onClick={() => {
+                  navigate('/feed');
+                  handleCloseUserMenu();
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                Feed
+              </Button> */}
+              <Button
+                key='Add post'
+                onClick={() => {
+                  navigate('/addpost');
+                  handleCloseUserMenu();
+                }}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Add post
               </Button>
-            ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -194,13 +205,22 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem onClick={() => {
+                navigate('/profile');
+                handleCloseUserMenu();
+              }}>
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">Upload</Typography>
+              <MenuItem onClick={() => {
+                navigate('/addpost');
+                handleCloseUserMenu();
+              }}>               
+                <Typography textAlign="center">Add post</Typography>
               </MenuItem>
-              <MenuItem onClick={() => logOut()}>
+              <MenuItem onClick={() => {
+                logOut();
+                handleCloseUserMenu();
+                }}>                
                 <Typography textAlign="center">Log Out</Typography>
               </MenuItem>
             </Menu>

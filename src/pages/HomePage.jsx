@@ -49,7 +49,6 @@ const Home = () => {
   return (
     <div>
       <Header />
-      <button onClick={() => getFeedPosts()}>GET POSTS</button>
       <div className="feed-posts">
         {feedPosts.map((post) => 
                 <Post
