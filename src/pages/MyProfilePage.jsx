@@ -111,6 +111,7 @@ const MyProfilePage = () => {
 
     await update(ref(db), updates);
     getUserInfo(firebaseAuth.currentUser.uid);
+    navigate(0)
     setFile(null);
     setFileName("");
   };

@@ -7,18 +7,43 @@ import {
     getDownloadURL,
 } from "firebase/storage";
 
-import { getDatabase, ref, child, update, get } from "firebase/database";
+import { getDatabase, ref, child, update, get, set, push} from "firebase/database";
 
 const AddPostPage = () => {
     const navigate = useNavigate();
     const [postText, setPostText] = useState('');
     const [imageUrl, setImageUrl] = useState('');
 
+    const addNewPost = async () => {
+        const db = getDatabase();
+        const dbRef = ref(getDatabase());
+        try {
+          const snapshot = await get(child(dbRef, `usersInfo/${firebaseAuth.currentUser.uid}`));
+    
+          if (snapshot.exists()) {
+            const snapshotVal = snapshot.val();
+
+            const newPostKey = push(child(ref(db), 'posts')).key;
+            set(ref(db, "posts/" + newPostKey), {
+                username: snapshotVal.username,
+                uid: firebaseAuth.currentUser.uid,
+                imageUrl: imageUrl,
+                postText: postText
+            });
+    
+            navigate('/profile')
+          } else {
+            console.log("No data available");
+          }
+        } catch (err) {
+          console.error(err);
+        }
+    }
 
     const handleFileAdd = async (event) => {
         const storageRef = sRef(
             firebaseStorage,
-            `/userAvatars/${Date.now()}${event.target.files[0].name}`
+            `/postImages/${Date.now()}${event.target.files[0].name}`
         );
         await uploadBytes(storageRef, event.target.files[0]);
         const downloadUrl = await getDownloadURL(storageRef);
@@ -47,7 +72,7 @@ const AddPostPage = () => {
                 placeholder="Your post text"
                 onChange={(e) => setPostText(e.target.value)}
             />
-        <button>Add post</button>
+        <button onClick={() => addNewPost()}>Add post</button>
     </div>
   )
 }
