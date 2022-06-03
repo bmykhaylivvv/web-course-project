@@ -59,6 +59,7 @@ const Home = () => {
                 }
                 photo={post.imageUrl}
                 text={post.postText}
+                onClick={() => navigate(`/${post.uid}`)}
               />)}
       </div>
     </div>
