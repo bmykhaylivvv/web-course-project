@@ -100,7 +100,7 @@ const Header = () => {
               textDecoration: "none",
             }}
           >
-            LOGO
+            Metoo
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
