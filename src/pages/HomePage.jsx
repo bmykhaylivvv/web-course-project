@@ -26,6 +26,7 @@ const Home = () => {
     return (
         <div>
             <p>Home111</p>
+            <button onClick={() => navigate('/profile')}>My Profile</button>
             <button onClick={() => logOut()}>Log Out</button>
         </div>
     );
