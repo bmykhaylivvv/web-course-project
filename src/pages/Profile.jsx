@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/Header";
 import { useParams } from "react-router-dom";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import Avatar from "@mui/material/Avatar";
 import "./Profile.css";
 
 const itemData = [
@@ -58,12 +59,22 @@ const itemData = [
 
 const Profile = () => {
   const { userName } = useParams();
+  const [userEmail, setUserEmail] = useState("kkulykk@gmail.com");
   return (
     <div>
       <Header />
-
       <div className="profile-page">
-        <div className="user-info">{userName}</div>
+        <div className="my-profile-info">
+          <Avatar
+            alt={userName}
+            // src={currentUserInfo?.avatarUrl}
+            sx={{ width: 80, height: 80 }}
+          />
+          <div className="my-profile-text-data">
+            <h3>{userName}</h3>
+            <p>{userEmail}</p>
+          </div>
+        </div>
         <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
           {itemData.map((item) => (
             <ImageListItem key={item.img}>
