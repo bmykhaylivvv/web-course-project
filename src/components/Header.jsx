@@ -15,9 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { firebaseAuth } from "../config/firebase-config";
 import { getDatabase, ref, child, get } from "firebase/database";
 
-
-
-
 const Header = () => {
   const navigate = useNavigate();
   const [currentUserInfo, setCurrentUserInfo] = useState({});
@@ -52,7 +49,7 @@ const Header = () => {
       console.error(err);
     }
   };
-  
+
   const pages = ["Feed", "Upload photo"];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -85,7 +82,7 @@ const Header = () => {
   }, []);
 
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography

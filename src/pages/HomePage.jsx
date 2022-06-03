@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Post from "../components/Post";
+import "./HomePage.css";
 
 import { firebaseAuth } from "../config/firebase-config";
 
@@ -24,13 +26,39 @@ const Home = () => {
     });
   }, []);
 
-    return (
-        <div>
-            <p>Home111</p>
-            <button onClick={() => navigate('/profile')}>My Profile</button>
-            <button onClick={() => logOut()}>Log Out</button>
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+      <div className="feed-posts">
+        <Post
+          userName={"kkulykk"}
+          userPhoto={
+            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+          }
+          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
+          text={"Summer vibes..."}
+        />
+        <Post
+          userName={"kkulykk"}
+          userPhoto={
+            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+          }
+          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
+          text={"Summer vibes..."}
+        />
+        <Post
+          userName={"kkulykk"}
+          userPhoto={
+            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+          }
+          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
+          text={"Summer vibes..."}
+        />
+      </div>
+      {/* <button onClick={() => navigate("/profile")}>My Profile</button>
+      <button onClick={() => logOut()}>Log Out</button> */}
+    </div>
+  );
 };
 
 export default Home;
