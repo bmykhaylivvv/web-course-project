@@ -24,7 +24,7 @@ const Home = () => {
                 (post) => post.uid !== firebaseAuth.currentUser.uid
             );
             
-            console.log(feedPosts.slice(0, 10))
+            console.log(feedPosts.slice(0, 25))
             setFeedPosts(feedPosts.slice(0, 25))
           } else {
             console.log("No data available");
