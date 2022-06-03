@@ -1,0 +1,19 @@
+.add-post-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.add-post-text {
+  margin: 35px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-post {
+  max-width: 350px;
+}
