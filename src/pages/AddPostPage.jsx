@@ -25,6 +25,7 @@ const AddPostPage = () => {
 
             const newPostKey = push(child(ref(db), 'posts')).key;
             set(ref(db, "posts/" + newPostKey), {
+                userAvatar: snapshotVal.avatarUrl,
                 username: snapshotVal.username,
                 uid: firebaseAuth.currentUser.uid,
                 imageUrl: imageUrl,
