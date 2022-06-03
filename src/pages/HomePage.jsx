@@ -1,27 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Post from "../components/Post";
 import "./HomePage.css";
+import { getDatabase, ref, child, update, get, set, push} from "firebase/database";
+
 
 import { firebaseAuth } from "../config/firebase-config";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [feedPosts, setFeedPosts] = useState([])
 
-  const logOut = async () => {
+  const getFeedPosts = async () => {
+    const dbRef = ref(getDatabase());
     try {
-      await firebaseAuth.signOut();
-      navigate("/signin");
+        const snapshot = await get(child(dbRef, `posts`));
+
+        if (snapshot.exists()) {
+            const snapshotVal = snapshot.val();
+
+            const feedPosts = Object.values(snapshotVal).filter(
+                (post) => post.uid !== firebaseAuth.currentUser.uid
+            );
+            
+            console.log(feedPosts.slice(0, 10))
+            setFeedPosts(feedPosts.slice(0, 10))
+          } else {
+            console.log("No data available");
+        }
     } catch (err) {
-      // handle error
+        console.error(err);
     }
-  };
+};
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (userCred) => {
       if (!userCred) {
         navigate("/signin");
+      }
+
+      if (userCred) {
+        getFeedPosts()
       }
     });
   }, []);
@@ -29,34 +49,18 @@ const Home = () => {
   return (
     <div>
       <Header />
+      <button onClick={() => getFeedPosts()}>GET POSTS</button>
       <div className="feed-posts">
-        <Post
-          userName={"kkulykk"}
-          userPhoto={
-            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
-          }
-          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
-          text={"Summer vibes..."}
-        />
-        <Post
-          userName={"kkulykk"}
-          userPhoto={
-            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
-          }
-          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
-          text={"Summer vibes..."}
-        />
-        <Post
-          userName={"kkulykk"}
-          userPhoto={
-            "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
-          }
-          photo={"https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"}
-          text={"Summer vibes..."}
-        />
+        {feedPosts.map((post) => 
+                <Post
+                userName={post.username}
+                userPhoto={
+                  post.userAvatar
+                }
+                photo={post.imageUrl}
+                text={post.postText}
+              />)}
       </div>
-      {/* <button onClick={() => navigate("/profile")}>My Profile</button>
-      <button onClick={() => logOut()}>Log Out</button> */}
     </div>
   );
 };
