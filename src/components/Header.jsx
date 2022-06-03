@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,11 +11,16 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
-import { firebaseAuth } from "../config/firebase-config";
 import { useNavigate } from "react-router-dom";
+import { firebaseAuth } from "../config/firebase-config";
+import { getDatabase, ref, child, get } from "firebase/database";
+
+
+
 
 const Header = () => {
   const navigate = useNavigate();
+  const [currentUserInfo, setCurrentUserInfo] = useState({});
 
   const logOut = async () => {
     try {
@@ -26,6 +31,28 @@ const Header = () => {
     }
   };
 
+  const getUserInfo = async (userId) => {
+    const dbRef = ref(getDatabase());
+    try {
+      const snapshot = await get(child(dbRef, `usersInfo/${userId}`));
+
+      if (snapshot.exists()) {
+        const snapshotVal = snapshot.val();
+        const currentUserInfoObject = {
+          username: snapshotVal.username,
+          email: snapshotVal.email,
+          avatarUrl: snapshotVal.avatarUrl,
+        };
+
+        setCurrentUserInfo(currentUserInfoObject);
+      } else {
+        console.log("No data available");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  
   const pages = ["Feed", "Upload photo"];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -44,6 +71,18 @@ const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged(async (userCred) => {
+      if (!userCred) {
+        navigate("/signin");
+      }
+
+      if (userCred) {
+        getUserInfo(userCred.uid);
+      }
+    });
+  }, []);
 
   return (
     <AppBar position="static">
@@ -136,7 +175,10 @@ const Header = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt={currentUserInfo?.username}
+                  src={currentUserInfo?.avatarUrl}
+                />
               </IconButton>
             </Tooltip>
             <Menu
