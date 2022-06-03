@@ -82,8 +82,9 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      {signUpError}
-      <Button
+      <div className='signup-page-error'>
+        {signUpError}
+      </div>      <Button
         sx={{ marginBottom: "10px" }}
         variant="contained"
         onClick={() => signUpWithEmailAndPassword()}

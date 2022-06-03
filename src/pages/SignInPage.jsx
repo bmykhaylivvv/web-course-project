@@ -63,7 +63,9 @@ const SignInPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      {signInError}
+      <div className='signup-page-error'>
+        {signInError}
+      </div>
       <Button
         sx={{ marginBottom: "10px" }}
         variant="contained"
