@@ -45,7 +45,7 @@ const Post = (props) => {
       <CardActions disableSpacing>
         <IconButton>
           <FavoriteIcon
-            color={color}
+            color={color} 
             onClick={() => {
               setColor(color === "error" ? "default" : "error");
               let likes = props.likes;
