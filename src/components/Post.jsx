@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -9,21 +9,49 @@ import { red } from "@mui/material/colors";
 import { CardActions, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
-import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getDatabase, ref, child, update, get, set, push} from "firebase/database";
+import { getDatabase, ref, child, update, get } from "firebase/database";
 
 const Post = (props) => {
   const navigate = useNavigate();
   const db = getDatabase();
-  const [color, setColor] = React.useState((props.likes!== "None" && props.likes.includes(props.cuid)) ? "error": "default");
-  const [likes, setLikes] = React.useState(props.likes==="None"?[]:[...props.likes]);
-  React.useEffect(() =>{
-    if(likes.length === 0) update(ref(db, "posts/" + props.postKey), {likes: "None"});
-    else update(ref(db, "posts/" + props.postKey), {likes: likes});
+  const [userAvatar, setUserAvatar] = useState("");
+  const [color, setColor] = useState(
+    props.likes !== "None" && props.likes.includes(props.cuid)
+      ? "error"
+      : "default"
+  );
+  const [likes, setLikes] = useState(
+    props.likes === "None" ? [] : [...props.likes]
+  );
+
+  const getAvatar = async () => {
+    const dbRef = ref(getDatabase());
+    try {
+      const avatar = await get(
+        child(dbRef, "usersInfo/" + props.uid + "/avatarUrl")
+      );
+
+      if (avatar.exists()) {
+        const avatarVal = avatar.val();
+        setUserAvatar(avatarVal);
+      } else {
+        console.log("No avatar available");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (likes.length === 0)
+      update(ref(db, "posts/" + props.postKey), { likes: "None" });
+    else update(ref(db, "posts/" + props.postKey), { likes: likes });
   }, [likes, db, props.postKey]);
 
-  const dbRef = ref(getDatabase());
-  const awatarUrl = get(child(dbRef, "usersInfo/"+props.uid+"/avatarUrl"));
+  useEffect(() => {
+    getAvatar();
+  }, []);
+
   return (
     <Card sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
       <CardHeader
@@ -32,7 +60,7 @@ const Post = (props) => {
             sx={{ bgcolor: red[500] }}
             alt={props.userName}
             aria-label="post"
-            src={awatarUrl}
+            src={userAvatar}
           />
         }
         title={props.userName}
@@ -51,22 +79,19 @@ const Post = (props) => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton>
-          <FavoriteIcon
-            color={color} 
-            onClick={ () => {
-              setColor(color === "error" ? "default" : "error");
-              if(color === "default"){
-                setLikes([props.cuid, ...likes]);
-              }else{
-                setLikes([...(likes.filter((value)=> value !== props.cuid))]);
-              }
-            }}
-          />
+        <IconButton
+          onClick={() => {
+            setColor(color === "error" ? "default" : "error");
+            if (color === "default") {
+              setLikes([props.cuid, ...likes]);
+            } else {
+              setLikes([...likes.filter((value) => value !== props.cuid)]);
+            }
+          }}
+        >
+          <FavoriteIcon color={color} />
         </IconButton>
-        <Typography>
-          {likes.length}
-        </Typography>
+        <Typography>{likes.length}</Typography>
       </CardActions>
     </Card>
   );

@@ -76,7 +76,11 @@ const Profile = () => {
             <p>{userEmail}</p>
           </div>
         </div>
-        <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+        <ImageList
+          sx={{ minWidth: 200, maxWidth: 550, width: "90%", height: 450 }}
+          cols={3}
+          rowHeight={164}
+        >
           {userPosts.map((post) => (
             <ImageListItem
               key={post.imageUrl}

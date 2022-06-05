@@ -83,7 +83,7 @@ const PostPage = () => {
         <Post
           userName={userName}
           userPhoto={post?.userAvatar}
-          // photo={post?.imageUrl}
+          photo={post?.imageUrl}
           text={post?.postText}
           uid={post.uid}
           cuid={firebaseAuth.currentUser.uid}
