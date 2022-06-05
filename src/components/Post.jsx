@@ -9,12 +9,13 @@ import { red } from "@mui/material/colors";
 import { CardActions, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
-import ToggleButton from "@mui/material/ToggleButton";
+import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getDatabase, ref, child, update, get, set, push} from "firebase/database";
 
 const Post = (props) => {
   const navigate = useNavigate();
-  const [color, setColor] = React.useState("default");
-  const [selected, setSelected] = React.useState(false);
+  const db = getDatabase();
+  const [color, setColor] = React.useState((props.likes!== "None" && props.likes.includes(props.cuid)) ? "error": "default");
   return (
     <Card sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
       <CardHeader
@@ -45,21 +46,25 @@ const Post = (props) => {
         <IconButton>
           <FavoriteIcon
             color={color}
-            onClick={() => setColor(color === "error" ? "default" : "error")}
+            onClick={() => {
+              setColor(color === "error" ? "default" : "error");
+              let likes = props.likes;
+              if(likes === "None") likes = [];
+              console.log(likes);
+              if(color === "default"){
+                likes.push(props.cuid);
+                console.log(likes);
+              }else{
+                likes = likes.filter((value)=> value !== props.cuid);
+                console.log(likes);
+              }
+              if (likes.length === 0) likes = "None";
+              console.log("FINAL");
+              console.log(props.postKey);
+              update(ref(db, "posts/" + props.postKey), {likes: likes});
+            }}
           />
         </IconButton>
-        <ToggleButton
-          value="check"
-          selected={selected}
-          onChange={() => {
-            setSelected(!selected);
-          }}
-        >
-          <FavoriteIcon />
-        </ToggleButton>
-        {/* <IconButton aria-label="add to favourites">
-          <FavoriteIcon onClick={() =>toggleLike()}/>
-        </IconButton> */}
       </CardActions>
     </Card>
   );
