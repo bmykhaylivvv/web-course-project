@@ -58,7 +58,9 @@ const Home = () => {
                 }
                 photo={post.imageUrl}
                 text={post.postText}
-                onClick={() => navigate(`/${post.uid}`)}
+                uid={post.uid}
+                cuid={firebaseAuth.currentUser.uid}
+                // likesId={post.likes}
               />)}
       </div>
     </div>

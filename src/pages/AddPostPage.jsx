@@ -29,7 +29,8 @@ const AddPostPage = () => {
                 username: snapshotVal.username,
                 uid: firebaseAuth.currentUser.uid,
                 imageUrl: imageUrl,
-                postText: postText
+                postText: postText,
+                likes: []
             });
     
             navigate('/profile')

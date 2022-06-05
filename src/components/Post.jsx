@@ -7,10 +7,16 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Avatar from "@mui/material/Avatar";
 import { red } from "@mui/material/colors";
+import { CardActions, IconButton } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import { useNavigate } from "react-router-dom";
+import ToggleButton from '@mui/material/ToggleButton';
 
 const Post = (props) => {
+  const navigate = useNavigate();
+  const [selected, setSelected] = React.useState(false);
   return (
-    <Card onClick={props.onClick} sx={{ maxWidth: 450, maxHeight: 450 }}>
+    <Card sx={{minWidth: 200, width: "90%", maxWidth: 500 }}>
       <CardHeader
         avatar={
           <Avatar
@@ -21,13 +27,28 @@ const Post = (props) => {
           />
         }
         title={props.userName}
+        onClick={() => navigate(`/${props.uid}`)}
       />
-      <CardMedia component="img" height="250" image={props.photo} alt="Photo" />
-      <CardContent>
+      <CardMedia component="img" width="450" image={props.photo} alt="Photo" />
+      <CardContent sx={{maxHeight: 600}}>
         <Typography variant="body2" color="text.secondary">
           {props.text}
         </Typography>
       </CardContent>
+      <CardActions disableSpacing>
+      <ToggleButton
+  value="check"
+  selected={selected}
+  onChange={() => {
+    setSelected(!selected);
+  }}
+>
+<FavoriteIcon/>
+</ToggleButton>
+        {/* <IconButton aria-label="add to favourites">
+          <FavoriteIcon onClick={() =>toggleLike()}/>
+        </IconButton> */}
+      </CardActions>
     </Card>
   );
 };
