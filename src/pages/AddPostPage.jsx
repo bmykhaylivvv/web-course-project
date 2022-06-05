@@ -29,7 +29,7 @@ const AddPostPage = () => {
                 userAvatar: snapshotVal.avatarUrl,
                 username: snapshotVal.username,
                 uid: firebaseAuth.currentUser.uid,
-                imageUrl: imageUrl,
+                // imageUrl: imageUrl,
                 postText: postText,
                 likes: "None"
             });

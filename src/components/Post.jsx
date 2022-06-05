@@ -21,6 +21,9 @@ const Post = (props) => {
     if(likes.length === 0) update(ref(db, "posts/" + props.postKey), {likes: "None"});
     else update(ref(db, "posts/" + props.postKey), {likes: likes});
   }, [likes, db, props.postKey]);
+
+  const dbRef = ref(getDatabase());
+  const awatarUrl = get(child(dbRef, "usersInfo/"+props.uid+"/avatarUrl"));
   return (
     <Card sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
       <CardHeader
@@ -29,7 +32,7 @@ const Post = (props) => {
             sx={{ bgcolor: red[500] }}
             alt={props.userName}
             aria-label="post"
-            src={props.userPhoto}
+            src={awatarUrl}
           />
         }
         title={props.userName}
