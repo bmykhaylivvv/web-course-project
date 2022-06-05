@@ -85,6 +85,10 @@ const PostPage = () => {
           userPhoto={post?.userAvatar}
           photo={post?.imageUrl}
           text={post?.postText}
+          uid={post.uid}
+          cuid={firebaseAuth.currentUser.uid}
+          postKey={post.postId}
+          likes={post.likes}
           onUserClick={() => navigate(`/${post.uid}`)}
         />
       </Box>
