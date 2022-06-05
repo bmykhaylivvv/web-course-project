@@ -10,8 +10,9 @@ import { red } from "@mui/material/colors";
 
 const Post = (props) => {
   return (
-    <Card onClick={props.onClick} sx={{ maxWidth: 450, maxHeight: 450 }}>
+    <Card sx={{ maxWidth: 450, maxHeight: 450 }}>
       <CardHeader
+        onClick={props.onUserClick}
         avatar={
           <Avatar
             sx={{ bgcolor: red[500] }}
@@ -22,7 +23,13 @@ const Post = (props) => {
         }
         title={props.userName}
       />
-      <CardMedia component="img" height="250" image={props.photo} alt="Photo" />
+      <CardMedia
+        onClick={props.onPhotoClick}
+        component="img"
+        height="250"
+        image={props.photo}
+        alt="Photo"
+      />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {props.text}

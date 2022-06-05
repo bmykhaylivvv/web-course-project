@@ -3,36 +3,44 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Post from "../components/Post";
 import "./HomePage.css";
-import { getDatabase, ref, child, update, get, set, push} from "firebase/database";
-
+import {
+  getDatabase,
+  ref,
+  child,
+  update,
+  get,
+  set,
+  push,
+} from "firebase/database";
 
 import { firebaseAuth } from "../config/firebase-config";
+import { CircularProgress } from "@mui/material";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [feedPosts, setFeedPosts] = useState([])
+  const [feedPosts, setFeedPosts] = useState([]);
 
   const getFeedPosts = async () => {
     const dbRef = ref(getDatabase());
     try {
-        const snapshot = await get(child(dbRef, `posts`));
+      const snapshot = await get(child(dbRef, `posts`));
 
-        if (snapshot.exists()) {
-            const snapshotVal = snapshot.val();
+      if (snapshot.exists()) {
+        const snapshotVal = snapshot.val();
 
-            const feedPosts = Object.values(snapshotVal).filter(
-                (post) => post.uid !== firebaseAuth.currentUser.uid
-            );
-            
-            // console.log(feedPosts.slice(0, 25).reverse())
-            setFeedPosts(feedPosts.slice(0, 25).reverse())
-          } else {
-            console.log("No data available");
-        }
+        const feedPosts = Object.values(snapshotVal).filter(
+          (post) => post.uid !== firebaseAuth.currentUser.uid
+        );
+
+        // console.log(feedPosts.slice(0, 25).reverse())
+        setFeedPosts(feedPosts.slice(0, 25).reverse());
+      } else {
+        console.log("No data available");
+      }
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
-};
+  };
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (userCred) => {
@@ -41,28 +49,32 @@ const Home = () => {
       }
 
       if (userCred) {
-        getFeedPosts()
+        getFeedPosts();
       }
     });
   }, []);
 
-  return (
-    <div>
-      <Header />
-      <div className="feed-posts">
-        {feedPosts.map((post) => 
-                <Post
-                userName={post.username}
-                userPhoto={
-                  post.userAvatar
-                }
-                photo={post.imageUrl}
-                text={post.postText}
-                onClick={() => navigate(`/${post.uid}`)}
-              />)}
+  if (feedPosts.length === 0) {
+    return <CircularProgress />;
+  } else {
+    return (
+      <div>
+        <Header />
+        <div className="feed-posts">
+          {feedPosts.map((post) => (
+            <Post
+              userName={post.username}
+              userPhoto={post.userAvatar}
+              photo={post.imageUrl}
+              text={post.postText}
+              onUserClick={() => navigate(`/${post.uid}`)}
+              onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Home;

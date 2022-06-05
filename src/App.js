@@ -4,9 +4,9 @@ import SignUpPage from "./pages/SignUpPage";
 import SignInPage from "./pages/SignInPage";
 import Profile from "./pages/Profile";
 import MyProfilePage from "./pages/MyProfilePage";
-import AddPostPage from "./pages/AddPostPage"
+import AddPostPage from "./pages/AddPostPage";
 import { Navigate } from "react-router-dom";
-
+import PostPage from "./pages/PostPage";
 
 const App = () => {
   return (
@@ -19,8 +19,8 @@ const App = () => {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/profile" element={<MyProfilePage />} />
           <Route path="/:userId" element={<Profile />} />
+          <Route path="/:userName/:postId" element={<PostPage />} />
           <Route path="/addpost" element={<AddPostPage />} />
-
         </Routes>
       </Router>
     </div>
