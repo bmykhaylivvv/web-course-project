@@ -127,7 +127,10 @@ const MyProfilePage = () => {
                     rowHeight={164}
                 >
                     {userPosts.map((post) => (
-                        <ImageListItem key={post.imageUrl}>
+                        <ImageListItem 
+                            key={post.imageUrl}
+                            onClick={() => navigate(`/${currentUserInfo?.username}/${post.uid}`)}
+                        >
                             <img
                                 src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
                                 srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}

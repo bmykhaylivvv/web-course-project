@@ -16,6 +16,11 @@ const Post = (props) => {
   const navigate = useNavigate();
   const db = getDatabase();
   const [color, setColor] = React.useState((props.likes!== "None" && props.likes.includes(props.cuid)) ? "error": "default");
+  const [likes, setLikes] = React.useState(props.likes==="None"?[]:[...props.likes]);
+  React.useEffect(() =>{
+    if(likes.length === 0) update(ref(db, "posts/" + props.postKey), {likes: "None"});
+    else update(ref(db, "posts/" + props.postKey), {likes: likes});
+  }, [likes, db, props.postKey]);
   return (
     <Card sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
       <CardHeader
@@ -46,25 +51,19 @@ const Post = (props) => {
         <IconButton>
           <FavoriteIcon
             color={color} 
-            onClick={() => {
+            onClick={ () => {
               setColor(color === "error" ? "default" : "error");
-              let likes = props.likes;
-              if(likes === "None") likes = [];
-              console.log(likes);
               if(color === "default"){
-                likes.push(props.cuid);
-                console.log(likes);
+                setLikes([props.cuid, ...likes]);
               }else{
-                likes = likes.filter((value)=> value !== props.cuid);
-                console.log(likes);
+                setLikes([...(likes.filter((value)=> value !== props.cuid))]);
               }
-              if (likes.length === 0) likes = "None";
-              console.log("FINAL");
-              console.log(props.postKey);
-              update(ref(db, "posts/" + props.postKey), {likes: likes});
             }}
           />
         </IconButton>
+        <Typography>
+          {likes.length}
+        </Typography>
       </CardActions>
     </Card>
   );
