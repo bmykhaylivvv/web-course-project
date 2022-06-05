@@ -54,27 +54,25 @@ const Home = () => {
     });
   }, []);
 
-  if (feedPosts.length === 0) {
-    return <CircularProgress />;
-  } else {
-    return (
-      <div>
-        <Header />
-        <div className="feed-posts">
-          {feedPosts.map((post) => (
-            <Post
-              userName={post.username}
-              userPhoto={post.userAvatar}
-              photo={post.imageUrl}
-              text={post.postText}
-              onUserClick={() => navigate(`/${post.uid}`)}
-              onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
-            />
-          ))}
-        </div>
+  return (
+    <div>
+      <Header />
+      <div className="feed-posts">
+        {feedPosts.map((post) => (
+          <Post
+            userName={post.username}
+            userPhoto={post.userAvatar}
+            photo={post.imageUrl}
+            text={post.postText}
+            uid={post.uid}
+            cuid={firebaseAuth.currentUser.uid}
+            // likesId={post.likes}
+            onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
+          />
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
 };
 
 export default Home;
