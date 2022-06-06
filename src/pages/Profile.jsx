@@ -27,7 +27,6 @@ const Profile = () => {
     const dbRef = ref(getDatabase());
     try {
       const snapshot = await get(child(dbRef, `usersInfo/${userId}`));
-
       if (snapshot.exists()) {
         const snapshotVal = snapshot.val();
 
@@ -109,11 +108,10 @@ const Profile = () => {
 
   useEffect(() => {
     updateFollowingsInDb();
-  }, [currFollowing]);
-
-  useEffect(() => {
-    updateFollowersInDb();
-  }, [userFollowers]);
+    if (userFollowers.length !== 0) {
+      updateFollowersInDb();
+    }
+  }, [currFollowing, userFollowers]);
 
   return (
     <div>
@@ -136,7 +134,11 @@ const Profile = () => {
               let newFollowers;
               if (colorOfFollow === "error") {
                 newFollowing = [...currFollowing.filter((value) => value !== userId)];
+                if (newFollowing.length === 0)
+                  newFollowing = "None";
                 newFollowers = [...userFollowers.filter((value) => value !== user.uid)];
+                if (newFollowers.length === 0)
+                  newFollowers = "None";
               } else {
                 if (currFollowing === "None" || currFollowing === undefined) {
                   newFollowing = [userId];
