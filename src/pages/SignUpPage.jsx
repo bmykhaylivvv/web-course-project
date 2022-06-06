@@ -24,6 +24,9 @@ const SignUp = () => {
       username: username,
       email: email,
       avatarUrl: avatarUrl,
+      following: "None",
+      followers: "None",
+      userId: userId
     });
   };
 

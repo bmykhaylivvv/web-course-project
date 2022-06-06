@@ -32,6 +32,7 @@ const MyProfilePage = () => {
           username: snapshotVal.username,
           email: snapshotVal.email,
           avatarUrl: snapshotVal.avatarUrl,
+          followers: snapshotVal.followers
         };
 
         setCurrentUserInfo(currentUserInfoObject);
@@ -113,6 +114,7 @@ const MyProfilePage = () => {
           <div className="my-profile-text-data">
             <h3>Hello, {currentUserInfo?.username}</h3>
             <p>{currentUserInfo?.email}</p>
+            <p>{(currentUserInfo?.followers === "None" || currentUserInfo?.followers === undefined) ? 0 : currentUserInfo?.followers.length} followers</p>
             <input type="file" onChange={(e) => handleFileAdd(e)} />
             <button onClick={() => updateAvatar()}>Update profile photo</button>
           </div>
