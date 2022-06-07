@@ -9,6 +9,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Button from "@mui/material/Button";
 import "./MyProfilePage.css";
+import { Typography } from "@mui/material";
 
 const MyProfilePage = () => {
   const navigate = useNavigate();
@@ -34,8 +35,8 @@ const MyProfilePage = () => {
           email: snapshotVal.email,
           avatarUrl: snapshotVal.avatarUrl,
           followers: snapshotVal.followers,
-          following: snapshotVal.following, 
-          userId: snapshotVal.userId
+          following: snapshotVal.following,
+          userId: snapshotVal.userId,
         };
 
         setCurrentUserInfo(currentUserInfoObject);
@@ -85,7 +86,7 @@ const MyProfilePage = () => {
       avatarUrl: downloadUrl,
       userId: currentUserInfo.userId,
       following: currentUserInfo.following,
-      followers: currentUserInfo.followers
+      followers: currentUserInfo.followers,
     };
 
     await update(ref(db), updates);
@@ -121,47 +122,56 @@ const MyProfilePage = () => {
           <div className="my-profile-text-data">
             <h3>Hello, {currentUserInfo?.username}</h3>
             <p>{currentUserInfo?.email}</p>
-            <p>{(currentUserInfo?.followers === "None" || currentUserInfo?.followers === undefined) ? 0 : currentUserInfo?.followers.length} followers</p>
+            <p>
+              {currentUserInfo?.followers === "None" ||
+              currentUserInfo?.followers === undefined
+                ? 0
+                : currentUserInfo?.followers.length}{" "}
+              followers
+            </p>
             <label htmlFor="upload-photo">
-            <input
-                style={{ display: 'none' }}
+              <input
+                style={{ display: "none" }}
                 id="upload-photo"
                 name="upload-photo"
                 type="file"
                 onChange={(e) => handleFileAdd(e)}
-            />
+              />
 
-            <Button variant="contained" component="span">
+              <Button variant="contained" component="span">
                 Upload photo
-            </Button>
+              </Button>
             </label>
             <Button variant="contained" onClick={() => updateAvatar()}>
-                Update profile photo
+              Update profile photo
             </Button>
           </div>
         </div>
-
-        <ImageList
-          sx={{ minWidth: 200, maxWidth: 550, width: "90%", height: 450 }}
-          cols={3}
-          rowHeight={164}
-        >
-          {userPosts.map((post) => (
-            <ImageListItem
-              key={post.imageUrl}
-              onClick={() =>
-                navigate(`/${currentUserInfo?.username}/${post.postId}`)
-              }
-            >
-              <img
-                src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                alt={post.postText}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        {userPosts.length === 0 ? (
+          <Typography>No posts yet</Typography>
+        ) : (
+          <ImageList
+            sx={{ minWidth: 200, maxWidth: 550, width: "90%", height: 450 }}
+            cols={3}
+            rowHeight={164}
+          >
+            {userPosts.map((post) => (
+              <ImageListItem
+                key={post.imageUrl}
+                onClick={() =>
+                  navigate(`/${currentUserInfo?.username}/${post.postId}`)
+                }
+              >
+                <img
+                  src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                  srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  alt={post.postText}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}  
       </div>
     </div>
   );

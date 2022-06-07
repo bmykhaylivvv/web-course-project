@@ -6,6 +6,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Avatar from "@mui/material/Avatar";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 import { getDatabase, ref, child, update, get } from "firebase/database";
 import "./Profile.css";
 import { firebaseAuth } from "../config/firebase-config";
@@ -65,35 +66,40 @@ const Profile = () => {
 
   const getCurrUserInfo = async (uid) => {
     const dbRef = ref(getDatabase());
-      try {
-        const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
-        
-        if (currSnapshot.exists()) {
-          const currSnapshotVal = currSnapshot.val();
+    try {
+      const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
 
-          setCurrFollowing(currSnapshotVal.following);
+      if (currSnapshot.exists()) {
+        const currSnapshotVal = currSnapshot.val();
 
-          const follows = currSnapshotVal.following;
-          setColorOfFollow((follows === "None" || !follows.includes(userId)) ? "success" : "error");
-        } else {
-          console.log("No data available");
-        }
-      } catch (err) {
-        console.log(err);
+        setCurrFollowing(currSnapshotVal.following);
+
+        const follows = currSnapshotVal.following;
+        setColorOfFollow(
+          follows === "None" || !follows.includes(userId) ? "success" : "error"
+        );
+      } else {
+        console.log("No data available");
       }
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const updateFollowingsInDb = async () => {
     const db = getDatabase();
     if (currFollowing !== undefined) {
-      if (currFollowing.length === 0) update(ref(db, "usersInfo/" + user.uid), { following: "None" });
-      else update(ref(db, "usersInfo/" + user.uid), { following: currFollowing }); 
+      if (currFollowing.length === 0)
+        update(ref(db, "usersInfo/" + user.uid), { following: "None" });
+      else
+        update(ref(db, "usersInfo/" + user.uid), { following: currFollowing });
     }
   };
 
   const updateFollowersInDb = async () => {
     const db = getDatabase();
-    if (userFollowers.length === 0) update(ref(db, "usersInfo/" + userId), { followers: "None" });
+    if (userFollowers.length === 0)
+      update(ref(db, "usersInfo/" + userId), { followers: "None" });
     else update(ref(db, "usersInfo/" + userId), { followers: userFollowers });
   };
 
@@ -128,57 +134,77 @@ const Profile = () => {
           <div className="my-profile-text-data">
             <h3>{username}</h3>
             <p>{userEmail}</p>
-            <p>{userFollowers === "None" ? 0 : userFollowers.length} followers</p>
-            <Button variant="contained" size="small" color={colorOfFollow}
-            onClick={() => {
-              setColorOfFollow(colorOfFollow === "success" ? "error" : "success");
-              let newFollowing;
-              let newFollowers;
-              if (colorOfFollow === "error") {
-                newFollowing = [...currFollowing.filter((value) => value !== userId)];
-                if (newFollowing.length === 0)
-                  newFollowing = "None";
-                newFollowers = [...userFollowers.filter((value) => value !== user.uid)];
-                if (newFollowers.length === 0)
-                  newFollowers = "None";
-              } else {
-                if (currFollowing === "None" || currFollowing === undefined) {
-                  newFollowing = [userId];
+            <p>
+              {userFollowers === "None" ? 0 : userFollowers.length} followers
+            </p>
+            <Button
+              variant="contained"
+              size="small"
+              color={colorOfFollow}
+              onClick={() => {
+                setColorOfFollow(
+                  colorOfFollow === "success" ? "error" : "success"
+                );
+                let newFollowing;
+                let newFollowers;
+                if (colorOfFollow === "error") {
+                  newFollowing = [
+                    ...currFollowing.filter((value) => value !== userId),
+                  ];
+                  if (newFollowing.length === 0) newFollowing = "None";
+                  newFollowers = [
+                    ...userFollowers.filter((value) => value !== user.uid),
+                  ];
+                  if (newFollowers.length === 0) newFollowers = "None";
                 } else {
-                  newFollowing = [...currFollowing, userId];
+                  if (currFollowing === "None" || currFollowing === undefined) {
+                    newFollowing = [userId];
+                  } else {
+                    newFollowing = [...currFollowing, userId];
+                  }
+
+                  if (userFollowers === "None" || userFollowers === undefined) {
+                    newFollowers = [user.uid];
+                  } else {
+                    newFollowers = [...userFollowers, user.uid];
+                  }
                 }
 
-                if (userFollowers === "None" || userFollowers === undefined) {
-                  newFollowers = [user.uid];
-                } else {
-                  newFollowers = [...userFollowers, user.uid];
-                }
-              }
-
-              setCurrFollowing(newFollowing);
-              setUserFollowers(newFollowers);
-            }}>{colorOfFollow === undefined ? "" : (colorOfFollow === "success" ? "follow" : "unfollow")}</Button>
+                setCurrFollowing(newFollowing);
+                setUserFollowers(newFollowers);
+              }}
+            >
+              {colorOfFollow === undefined
+                ? ""
+                : colorOfFollow === "success"
+                ? "follow"
+                : "unfollow"}
+            </Button>
           </div>
         </div>
-        <ImageList
-          sx={{ minWidth: 200, maxWidth: 550, width: "90%", height: 450 }}
-          cols={3}
-          rowHeight={164}
-        >
-          {userPosts.map((post) => (
-            <ImageListItem
-              key={post.imageUrl}
-              onClick={() => navigate(`/${username}/${post.postId}`)}
-            >
-              <img
-                src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                alt={post.postText}
-                loading="lazy"
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
+        {userPosts.length === 0 ? (
+          <Typography>No posts yet</Typography>
+        ) : (
+          <ImageList
+            sx={{ minWidth: 200, maxWidth: 550, width: "90%", height: 450 }}
+            cols={3}
+            rowHeight={164}
+          >
+            {userPosts.map((post) => (
+              <ImageListItem
+                key={post.imageUrl}
+                onClick={() => navigate(`/${username}/${post.postId}`)}
+              >
+                <img
+                  src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
+                  srcSet={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                  alt={post.postText}
+                  loading="lazy"
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        )}
       </div>
     </div>
   );

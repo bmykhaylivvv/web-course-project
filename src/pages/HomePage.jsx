@@ -48,20 +48,20 @@ const Home = () => {
 
   const getCurrUserInfo = async (uid) => {
     const dbRef = ref(getDatabase());
-      try {
-        const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
-        
-        if (currSnapshot.exists()) {
-          const currSnapshotVal = currSnapshot.val();
+    try {
+      const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
 
-          setUserFollowing(currSnapshotVal.following);
-        } else {
-          console.log("No data available");
-        }
-      } catch (err) {
-        console.log(err);
+      if (currSnapshot.exists()) {
+        const currSnapshotVal = currSnapshot.val();
+
+        setUserFollowing(currSnapshotVal.following);
+      } else {
+        console.log("No data available");
       }
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (userCred) => {
@@ -99,36 +99,40 @@ const Home = () => {
     <div>
       <Header />
       <div className="feed-posts">
-        <p>Followings posts</p>
-        {feedPosts.filter((post) => userFollowing.includes(post.uid)).map((post) => (
-          <Post
-            key={post.postId}
-            userName={post.username}
-            userPhoto={post.userAvatar}
-            photo={post.imageUrl}
-            text={post.postText}
-            uid={post.uid}
-            cuid={firebaseAuth.currentUser.uid}
-            postKey={post.postId}
-            likes={post.likes}
-            onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
-          />
-        ))}
-        <p>Recommendation posts</p>
-        {feedPosts.filter((post) => !userFollowing.includes(post.uid)).map((post) => (
-          <Post
-            key={post.postId}
-            userName={post.username}
-            userPhoto={post.userAvatar}
-            photo={post.imageUrl}
-            text={post.postText}
-            uid={post.uid}
-            cuid={firebaseAuth.currentUser.uid}
-            postKey={post.postId}
-            likes={post.likes}
-            onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
-          />
-        ))}
+        <p>Posts of people you follow</p>
+        {feedPosts
+          .filter((post) => userFollowing.includes(post.uid))
+          .map((post) => (
+            <Post
+              key={post.postId}
+              userName={post.username}
+              userPhoto={post.userAvatar}
+              photo={post.imageUrl}
+              text={post.postText}
+              uid={post.uid}
+              cuid={firebaseAuth.currentUser.uid}
+              postKey={post.postId}
+              likes={post.likes}
+              onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
+            />
+          ))}
+        <p>Recommended for you</p>
+        {feedPosts
+          .filter((post) => !userFollowing.includes(post.uid))
+          .map((post) => (
+            <Post
+              key={post.postId}
+              userName={post.username}
+              userPhoto={post.userAvatar}
+              photo={post.imageUrl}
+              text={post.postText}
+              uid={post.uid}
+              cuid={firebaseAuth.currentUser.uid}
+              postKey={post.postId}
+              likes={post.likes}
+              onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
+            />
+          ))}
       </div>
     </div>
   );

@@ -9,8 +9,8 @@ import { red } from "@mui/material/colors";
 import { CardActions, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
-import { getDatabase, ref, child, update, get,set } from "firebase/database";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { getDatabase, ref, child, update, get, set } from "firebase/database";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const Post = (props) => {
   const navigate = useNavigate();
@@ -55,9 +55,9 @@ const Post = (props) => {
 
   const deletePost = () => {
     const dbRef = ref(db, "posts/" + props.postKey);
-    set(dbRef, null)
-    navigate("/profile")
-  }
+    set(dbRef, null);
+    navigate("/profile");
+  };
 
   return (
     <Card sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
@@ -99,11 +99,11 @@ const Post = (props) => {
           <FavoriteIcon color={color} />
         </IconButton>
         <Typography>{likes.length}</Typography>
-        {props.cuid === props.uid?(
-          <IconButton onClick = {deletePost}>
-            <DeleteIcon color = "error"></DeleteIcon>
+        {props.cuid === props.uid ? (
+          <IconButton sx={{ marginLeft: "80%" }} onClick={deletePost}>
+            <DeleteIcon />
           </IconButton>
-        ): null}
+        ) : null}
       </CardActions>
     </Card>
   );
