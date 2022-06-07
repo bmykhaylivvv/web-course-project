@@ -145,7 +145,7 @@ const PostPage = () => {
         }}
       >
         <Typography>Comments</Typography>
-        <Comments comments={post.comments === "None" ? [] : post.comments} />
+        <Comments comments={post.comments === "None" ? [] : post.comments} currUserId={user.uid} />
         <TextField
           sx={{
             width: "60%",
@@ -168,6 +168,7 @@ const PostPage = () => {
               user: {
                 username: currUser.username,
                 avatarUrl: currUser.avatarUrl,
+                userId: currUser.userId
               },
               text: commentText,
             };

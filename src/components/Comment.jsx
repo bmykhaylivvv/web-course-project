@@ -5,15 +5,18 @@ import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
+import { useNavigate } from "react-router-dom";
 
 export default function Comments(props) {
+  const navigate = useNavigate();
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         {props.comments.map((comment) => (
           <div key={comment.commentId}>
             <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
-                <Avatar alt={comment.user.username} src={comment.user.avatarUrl} />
+                <Avatar alt={comment.user.username} src={comment.user.avatarUrl} 
+                onClick={() => navigate(comment.user.userId === props.currUserId ? "/profile" : `/${comment.user.userId}`)}/>
                 </ListItemAvatar>
                 <ListItemText
                 primary={comment.user.username}
