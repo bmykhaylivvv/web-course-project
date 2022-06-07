@@ -21,6 +21,9 @@ const Home = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [feedPosts, setFeedPosts] = useState([]);
+  const [userFollowing, setUserFollowing] = useState([]);
+
+  const user = firebaseAuth.currentUser;
 
   const getFeedPosts = async () => {
     const dbRef = ref(getDatabase());
@@ -43,6 +46,23 @@ const Home = () => {
     }
   };
 
+  const getCurrUserInfo = async (uid) => {
+    const dbRef = ref(getDatabase());
+      try {
+        const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
+        
+        if (currSnapshot.exists()) {
+          const currSnapshotVal = currSnapshot.val();
+
+          setUserFollowing(currSnapshotVal.following);
+        } else {
+          console.log("No data available");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+  }
+
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (userCred) => {
       if (!userCred) {
@@ -54,6 +74,12 @@ const Home = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      getCurrUserInfo(user.uid);
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -73,7 +99,23 @@ const Home = () => {
     <div>
       <Header />
       <div className="feed-posts">
-        {feedPosts.map((post) => (
+        <p>Followings posts</p>
+        {feedPosts.filter((post) => userFollowing.includes(post.uid)).map((post) => (
+          <Post
+            key={post.uid}
+            userName={post.username}
+            userPhoto={post.userAvatar}
+            photo={post.imageUrl}
+            text={post.postText}
+            uid={post.uid}
+            cuid={firebaseAuth.currentUser.uid}
+            postKey={post.postId}
+            likes={post.likes}
+            onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
+          />
+        ))}
+        <p>Recommendation posts</p>
+        {feedPosts.filter((post) => !userFollowing.includes(post.uid)).map((post) => (
           <Post
             key={post.uid}
             userName={post.username}
