@@ -166,7 +166,7 @@ const Profile = () => {
           {userPosts.map((post) => (
             <ImageListItem
               key={post.imageUrl}
-              onClick={() => navigate(`/${username}/${post.uid}`)}
+              onClick={() => navigate(`/${username}/${post.postId}`)}
             >
               <img
                 src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}
