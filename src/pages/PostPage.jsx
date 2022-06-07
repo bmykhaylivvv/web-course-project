@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
 import Header from "../components/Header";
 import Post from "../components/Post";
+import Comments from "../components/Comment"
 
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, child, get, update} from "firebase/database";
 
 import { firebaseAuth } from "../config/firebase-config";
 import { CircularProgress } from "@mui/material";
@@ -14,8 +17,12 @@ const PostPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const { userName, postId } = useParams();
+  const [commentText, setCommentText] = useState("");
+  const [currUser, setCurrUser] = useState();
 
-  const [post, setPost] = useState([]);
+  const [post, setPost] = useState();
+
+  const user = firebaseAuth.currentUser;
 
   const getPost = async () => {
     const dbRef = ref(getDatabase());
@@ -43,6 +50,28 @@ const PostPage = () => {
     }
   };
 
+  const getCurrUserInfo = async (uid) => {
+    const dbRef = ref(getDatabase());
+      try {
+        const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
+        
+        if (currSnapshot.exists()) {
+          const currSnapshotVal = currSnapshot.val();
+
+          setCurrUser(currSnapshotVal);
+        } else {
+          console.log("No data available");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+  }
+
+  const addNewCommentToDb = () => {
+    const db = getDatabase();
+    update(ref(db, "posts/" + post.postId), { comments: post.comments });
+  };
+
   useEffect(() => {
     firebaseAuth.onAuthStateChanged(async (userCred) => {
       if (!userCred) {
@@ -54,6 +83,17 @@ const PostPage = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      getCurrUserInfo(user.uid);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (post !== undefined)
+      addNewCommentToDb();
+  }, [post]);
 
   if (loading) {
     return (
@@ -92,6 +132,31 @@ const PostPage = () => {
           onUserClick={() => navigate(`/${post.postId}`)}
         />
       </Box>
+      <Box sx={{
+          height: "80vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}>
+        <Comments comments={post.comments === "None" ? [] : post.comments}/>
+      </Box>
+      <Button variant="contained" component="span" onClick={() => {
+        let comments = post.comments === "None" ? [] : post.comments;
+        const newComment = {commentId: 0, user: {username: currUser.username, avatarUrl: currUser.avatarUrl}, text: commentText};
+        comments = [...comments, newComment];
+        let newPost = { ...post};
+        newPost.comments = comments;
+        setPost(newPost);
+      }}>
+        Add comment
+      </Button>
+      <TextField
+        sx={{ width: "90%", minWidth: "200px", maxWidth:"500px", marginBottom: "50px" }}
+        type="text"
+        multiline
+        placeholder="Your comment"
+        onChange={(e) => setCommentText(e.target.value)}
+      />
     </div>
   );
 };

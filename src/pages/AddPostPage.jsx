@@ -41,6 +41,7 @@ const AddPostPage = () => {
           imageUrl: imageUrl,
           postText: postText,
           likes: "None",
+          comments: "None"
         });
 
         navigate("/profile");
