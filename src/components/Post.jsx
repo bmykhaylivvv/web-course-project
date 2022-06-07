@@ -76,11 +76,11 @@ const Post = (props) => {
       <CardMedia
         onClick={props.onPhotoClick}
         component="img"
-        width="450"
+        sx={{ maxHeight: 400, objectFit: "contain" }}
         image={props.photo}
         alt="Photo"
       />
-      <CardContent sx={{ maxHeight: 600 }}>
+      <CardContent>
         <Typography variant="body2" color="text.secondary">
           {props.text}
         </Typography>

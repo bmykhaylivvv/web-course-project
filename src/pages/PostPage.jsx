@@ -6,9 +6,10 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Header from "../components/Header";
 import Post from "../components/Post";
-import Comments from "../components/Comment"
+import Typography from "@mui/material/Typography";
+import Comments from "../components/Comment";
 
-import { getDatabase, ref, child, get, update} from "firebase/database";
+import { getDatabase, ref, child, get, update } from "firebase/database";
 
 import { firebaseAuth } from "../config/firebase-config";
 import { CircularProgress } from "@mui/material";
@@ -52,20 +53,20 @@ const PostPage = () => {
 
   const getCurrUserInfo = async (uid) => {
     const dbRef = ref(getDatabase());
-      try {
-        const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
-        
-        if (currSnapshot.exists()) {
-          const currSnapshotVal = currSnapshot.val();
+    try {
+      const currSnapshot = await get(child(dbRef, `usersInfo/${uid}`));
 
-          setCurrUser(currSnapshotVal);
-        } else {
-          console.log("No data available");
-        }
-      } catch (err) {
-        console.log(err);
+      if (currSnapshot.exists()) {
+        const currSnapshotVal = currSnapshot.val();
+
+        setCurrUser(currSnapshotVal);
+      } else {
+        console.log("No data available");
       }
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const addNewCommentToDb = () => {
     const db = getDatabase();
@@ -91,8 +92,7 @@ const PostPage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (post !== undefined)
-      addNewCommentToDb();
+    if (post !== undefined) addNewCommentToDb();
   }, [post]);
 
   if (loading) {
@@ -132,31 +132,55 @@ const PostPage = () => {
           onUserClick={() => navigate(`/${post.postId}`)}
         />
       </Box>
-      <Box sx={{
-          height: "80vh",
+
+      <Box
+        sx={{
+          width: "100%",
+          flexDirection: "column",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-        }}>
-        <Comments comments={post.comments === "None" ? [] : post.comments}/>
+          gap: 1,
+          marginBottom: 10,
+        }}
+      >
+        <Typography>Comments</Typography>
+        <Comments comments={post.comments === "None" ? [] : post.comments} />
+        <TextField
+          sx={{
+            width: "60%",
+            minWidth: "200px",
+            maxWidth: "300px",
+          }}
+          type="text"
+          multiline
+          placeholder="Your comment"
+          onChange={(e) => setCommentText(e.target.value)}
+          value={commentText}
+        />
+        <Button
+          variant="contained"
+          component="span"
+          onClick={() => {
+            let comments = post.comments === "None" ? [] : post.comments;
+            const newComment = {
+              commentId: 0,
+              user: {
+                username: currUser.username,
+                avatarUrl: currUser.avatarUrl,
+              },
+              text: commentText,
+            };
+            comments = [...comments, newComment];
+            let newPost = { ...post };
+            newPost.comments = comments;
+            setPost(newPost);
+            setCommentText("");
+          }}
+        >
+          Add comment
+        </Button>
       </Box>
-      <Button variant="contained" component="span" onClick={() => {
-        let comments = post.comments === "None" ? [] : post.comments;
-        const newComment = {commentId: 0, user: {username: currUser.username, avatarUrl: currUser.avatarUrl}, text: commentText};
-        comments = [...comments, newComment];
-        let newPost = { ...post};
-        newPost.comments = comments;
-        setPost(newPost);
-      }}>
-        Add comment
-      </Button>
-      <TextField
-        sx={{ width: "90%", minWidth: "200px", maxWidth:"500px", marginBottom: "50px" }}
-        type="text"
-        multiline
-        placeholder="Your comment"
-        onChange={(e) => setCommentText(e.target.value)}
-      />
     </div>
   );
 };
