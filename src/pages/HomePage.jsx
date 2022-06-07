@@ -102,7 +102,7 @@ const Home = () => {
         <p>Followings posts</p>
         {feedPosts.filter((post) => userFollowing.includes(post.uid)).map((post) => (
           <Post
-            key={post.uid}
+            key={post.postId}
             userName={post.username}
             userPhoto={post.userAvatar}
             photo={post.imageUrl}
@@ -117,7 +117,7 @@ const Home = () => {
         <p>Recommendation posts</p>
         {feedPosts.filter((post) => !userFollowing.includes(post.uid)).map((post) => (
           <Post
-            key={post.uid}
+            key={post.postId}
             userName={post.username}
             userPhoto={post.userAvatar}
             photo={post.imageUrl}
