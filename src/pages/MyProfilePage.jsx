@@ -32,7 +32,9 @@ const MyProfilePage = () => {
           username: snapshotVal.username,
           email: snapshotVal.email,
           avatarUrl: snapshotVal.avatarUrl,
-          followers: snapshotVal.followers
+          followers: snapshotVal.followers,
+          following: snapshotVal.following, 
+          userId: snapshotVal.userId
         };
 
         setCurrentUserInfo(currentUserInfoObject);
@@ -75,10 +77,14 @@ const MyProfilePage = () => {
 
     const db = getDatabase();
     const updates = {};
+
     updates["/usersInfo/" + firebaseAuth.currentUser.uid] = {
       email: currentUserInfo.email,
       username: currentUserInfo.username,
       avatarUrl: downloadUrl,
+      userId: currentUserInfo.userId,
+      following: currentUserInfo.following,
+      followers: currentUserInfo.followers
     };
 
     await update(ref(db), updates);
