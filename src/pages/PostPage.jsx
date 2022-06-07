@@ -26,7 +26,7 @@ const PostPage = () => {
         const snapshotVal = snapshot.val();
 
         const posts = Object.values(snapshotVal).filter(
-          (post) => post.uid === postId
+          (post) => post.postId === postId
         );
 
         if (posts.length === 0) {
@@ -89,7 +89,7 @@ const PostPage = () => {
           cuid={firebaseAuth.currentUser.uid}
           postKey={post.postId}
           likes={post.likes}
-          onUserClick={() => navigate(`/${post.uid}`)}
+          onUserClick={() => navigate(`/${post.postId}`)}
         />
       </Box>
     </div>

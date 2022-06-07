@@ -111,7 +111,7 @@ const Home = () => {
             cuid={firebaseAuth.currentUser.uid}
             postKey={post.postId}
             likes={post.likes}
-            onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
+            onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
           />
         ))}
         <p>Recommendation posts</p>
@@ -126,7 +126,7 @@ const Home = () => {
             cuid={firebaseAuth.currentUser.uid}
             postKey={post.postId}
             likes={post.likes}
-            onPhotoClick={() => navigate(`/${post.username}/${post.uid}`)}
+            onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
           />
         ))}
       </div>

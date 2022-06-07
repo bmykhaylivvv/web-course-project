@@ -150,7 +150,7 @@ const MyProfilePage = () => {
             <ImageListItem
               key={post.imageUrl}
               onClick={() =>
-                navigate(`/${currentUserInfo?.username}/${post.uid}`)
+                navigate(`/${currentUserInfo?.username}/${post.postId}`)
               }
             >
               <img
