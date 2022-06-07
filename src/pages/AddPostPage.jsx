@@ -82,15 +82,17 @@ const AddPostPage = () => {
       </div>
 
       <TextField
-        sx={{ width: "500px", marginBottom: "50px" }}
+        sx={{ width: "90%", minWidth: "200px", maxWidth:"500px", marginBottom: "50px" }}
         type="text"
         multiline
         placeholder="Your post text"
         onChange={(e) => setPostText(e.target.value)}
       />
+      {imageUrl ? (
       <Button variant="contained" onClick={() => addNewPost()}>
         Add post
       </Button>
+      ) : null}
     </div>
   );
 };
