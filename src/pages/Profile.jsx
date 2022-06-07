@@ -85,8 +85,10 @@ const Profile = () => {
 
   const updateFollowingsInDb = async () => {
     const db = getDatabase();
-    if (currFollowing.length === 0) update(ref(db, "usersInfo/" + user.uid), { following: "None" });
-    else update(ref(db, "usersInfo/" + user.uid), { following: currFollowing });
+    if (currFollowing !== undefined) {
+      if (currFollowing.length === 0) update(ref(db, "usersInfo/" + user.uid), { following: "None" });
+      else update(ref(db, "usersInfo/" + user.uid), { following: currFollowing }); 
+    }
   };
 
   const updateFollowersInDb = async () => {
