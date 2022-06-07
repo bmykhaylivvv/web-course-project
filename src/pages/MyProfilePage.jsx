@@ -7,6 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import { getDatabase, ref, child, update, get } from "firebase/database";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import Button from "@mui/material/Button";
 import "./MyProfilePage.css";
 
 const MyProfilePage = () => {
@@ -121,8 +122,22 @@ const MyProfilePage = () => {
             <h3>Hello, {currentUserInfo?.username}</h3>
             <p>{currentUserInfo?.email}</p>
             <p>{(currentUserInfo?.followers === "None" || currentUserInfo?.followers === undefined) ? 0 : currentUserInfo?.followers.length} followers</p>
-            <input type="file" onChange={(e) => handleFileAdd(e)} />
-            <button onClick={() => updateAvatar()}>Update profile photo</button>
+            <label htmlFor="upload-photo">
+            <input
+                style={{ display: 'none' }}
+                id="upload-photo"
+                name="upload-photo"
+                type="file"
+                onChange={(e) => handleFileAdd(e)}
+            />
+
+            <Button variant="contained" component="span">
+                Upload photo
+            </Button>
+            </label>
+            <Button variant="contained" onClick={() => updateAvatar()}>
+                Update profile photo
+            </Button>
           </div>
         </div>
 

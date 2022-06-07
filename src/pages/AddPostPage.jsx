@@ -78,7 +78,19 @@ const AddPostPage = () => {
         {imageUrl ? (
           <img className="image-post" src={imageUrl} alt="User avatar" />
         ) : null}
-        <input type="file" onChange={(e) => handleFileAdd(e)} />
+        <label>
+         <input
+                style={{ display: 'none' }}
+                id="upload-photo"
+                name="upload-photo"
+                type="file"
+                onChange={(e) => handleFileAdd(e)}
+            />
+
+            <Button variant="contained" component="span">
+                Choose image
+            </Button>
+        </label>
       </div>
 
       <TextField
