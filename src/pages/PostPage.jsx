@@ -68,6 +68,14 @@ const PostPage = () => {
     }
   };
 
+  const getCurrTime = () => {
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+time;
+    return dateTime
+  };
+
   const addNewCommentToDb = () => {
     const db = getDatabase();
     update(ref(db, "posts/" + post.postId), { comments: post.comments });
@@ -164,7 +172,7 @@ const PostPage = () => {
           onClick={() => {
             let comments = post.comments === "None" ? [] : post.comments;
             const newComment = {
-              commentId: 0,
+              commentId: currUser.userId + getCurrTime(),
               user: {
                 username: currUser.username,
                 avatarUrl: currUser.avatarUrl,
