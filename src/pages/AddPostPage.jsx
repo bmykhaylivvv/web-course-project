@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { firebaseAuth, firebaseStorage } from "../config/firebase-config";
+import { firebaseAuth, firebaseStorage, getCurrTime } from "../config/firebase-config";
 import { ref as sRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import Header from "../components/Header";
 import Button from "@mui/material/Button";
@@ -41,7 +41,8 @@ const AddPostPage = () => {
           imageUrl: imageUrl,
           postText: postText,
           likes: "None",
-          comments: "None"
+          comments: "None",
+          time: getCurrTime(),
         });
 
         navigate("/profile");

@@ -99,7 +99,10 @@ const Home = () => {
     <div>
       <Header />
       <div className="feed-posts">
-        <p>Posts of people you follow</p>
+        <p>{feedPosts.length === 0 ? "No posts are available for you" : ""}</p>
+        <p>{feedPosts
+              .filter((post) => userFollowing.includes(post.uid))
+              .length === 0 ? "" : "Posts of people you follow"}</p>
         {feedPosts
           .filter((post) => userFollowing.includes(post.uid))
           .map((post) => (
@@ -116,7 +119,9 @@ const Home = () => {
               onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
             />
           ))}
-        <p>Recommended for you</p>
+        <p>{feedPosts
+              .filter((post) => !userFollowing.includes(post.uid))
+              .length === 0 ? "" : "Recommended for you"}</p>
         {feedPosts
           .filter((post) => !userFollowing.includes(post.uid))
           .map((post) => (
@@ -130,6 +135,7 @@ const Home = () => {
               cuid={firebaseAuth.currentUser.uid}
               postKey={post.postId}
               likes={post.likes}
+              time={post.time}
               onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
             />
           ))}

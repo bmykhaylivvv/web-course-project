@@ -19,7 +19,7 @@ export default function Comments(props) {
                 onClick={() => navigate(comment.user.userId === props.currUserId ? "/profile" : `/${comment.user.userId}`)}/>
                 </ListItemAvatar>
                 <ListItemText
-                primary={comment.user.username}
+                primary={comment.user.username + " " + comment.time.split(' ')[0]}
                 secondary={
                     <React.Fragment>
                     {comment.text}

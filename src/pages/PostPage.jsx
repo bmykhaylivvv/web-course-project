@@ -11,7 +11,7 @@ import Comments from "../components/Comment";
 
 import { getDatabase, ref, child, get, update } from "firebase/database";
 
-import { firebaseAuth } from "../config/firebase-config";
+import { firebaseAuth, getCurrTime } from "../config/firebase-config";
 import { CircularProgress } from "@mui/material";
 
 const PostPage = () => {
@@ -66,14 +66,6 @@ const PostPage = () => {
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const getCurrTime = () => {
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+time;
-    return dateTime
   };
 
   const addNewCommentToDb = () => {
@@ -137,6 +129,7 @@ const PostPage = () => {
           cuid={firebaseAuth.currentUser.uid}
           postKey={post.postId}
           likes={post.likes}
+          time={post.time}
           onUserClick={() => navigate(`/${post.postId}`)}
         />
       </Box>
@@ -179,6 +172,7 @@ const PostPage = () => {
                 userId: currUser.userId
               },
               text: commentText,
+              time: getCurrTime(),
             };
             comments = [...comments, newComment];
             let newPost = { ...post };
