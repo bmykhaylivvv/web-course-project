@@ -8,6 +8,7 @@ import Header from "../components/Header";
 import Post from "../components/Post";
 import Typography from "@mui/material/Typography";
 import Comments from "../components/Comment";
+import { Grid } from '@mui/material';
 
 import { getDatabase, ref, child, get, update } from "firebase/database";
 
@@ -145,44 +146,49 @@ const PostPage = () => {
           marginBottom: 10,
         }}
       >
-        <Typography>Comments</Typography>
-        <Comments comments={post.comments === "None" ? [] : post.comments} currUserId={user.uid} />
-        <TextField
-          sx={{
-            width: "60%",
-            minWidth: "200px",
-            maxWidth: "300px",
-          }}
-          type="text"
-          multiline
-          placeholder="Your comment"
-          onChange={(e) => setCommentText(e.target.value)}
-          value={commentText}
-        />
-        <Button
-          variant="contained"
-          component="span"
-          onClick={() => {
-            let comments = post.comments === "None" ? [] : post.comments;
-            const newComment = {
-              commentId: currUser.userId + getCurrTime(),
-              user: {
-                username: currUser.username,
-                avatarUrl: currUser.avatarUrl,
-                userId: currUser.userId
-              },
-              text: commentText,
-              time: getCurrTime(),
-            };
-            comments = [...comments, newComment];
-            let newPost = { ...post };
-            newPost.comments = comments;
-            setPost(newPost);
-            setCommentText("");
-          }}
-        >
-          Add comment
-        </Button>
+        <Comments
+          sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}
+          comments={post.comments === "None" ? [] : post.comments} currUserId={user.uid} />
+        <Grid container sx={{ minWidth: 200, width: "90%", maxWidth: 500 }}>
+          <Grid item xs={9} >
+            <TextField
+              sx={{ width: "100%" }}
+              type="text"
+              multiline
+              placeholder="Your comment"
+              onChange={(e) => setCommentText(e.target.value)}
+              value={commentText}
+            />
+          </Grid>
+          <Grid item xs={1} ></Grid>
+          <Grid item xs={2} >
+            <Button
+              variant="contained"
+              component="span"
+              sx={{ width: "100%", height: "100%" }}
+              onClick={() => {
+                let comments = post.comments === "None" ? [] : post.comments;
+                const newComment = {
+                  commentId: currUser.userId + getCurrTime(),
+                  user: {
+                    username: currUser.username,
+                    avatarUrl: currUser.avatarUrl,
+                    userId: currUser.userId
+                  },
+                  text: commentText,
+                  time: getCurrTime(),
+                };
+                comments = [...comments, newComment];
+                let newPost = { ...post };
+                newPost.comments = comments;
+                setPost(newPost);
+                setCommentText("");
+              }}
+            >
+              Post
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </div>
   );

@@ -99,10 +99,10 @@ const Home = () => {
     <div>
       <Header />
       <div className="feed-posts">
-        <p>{feedPosts.length === 0 ? "No posts are available for you" : ""}</p>
-        <p>{feedPosts
+        {feedPosts.length === 0 ? <p>No posts are available for you</p> : null}
+        {feedPosts
               .filter((post) => userFollowing.includes(post.uid))
-              .length === 0 ? "" : "Posts of people you follow"}</p>
+              .length === 0 ?null : <p>Posts of people you follow</p>}
         {feedPosts
           .filter((post) => userFollowing.includes(post.uid))
           .map((post) => (
@@ -119,9 +119,9 @@ const Home = () => {
               onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
             />
           ))}
-        <p>{feedPosts
+        {feedPosts
               .filter((post) => !userFollowing.includes(post.uid))
-              .length === 0 ? "" : "Recommended for you"}</p>
+              .length === 0 ? null : <p>Recommended for you</p>}
         {feedPosts
           .filter((post) => !userFollowing.includes(post.uid))
           .map((post) => (

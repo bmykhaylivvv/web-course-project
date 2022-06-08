@@ -70,7 +70,7 @@ const Post = (props) => {
             src={userAvatar}
           />
         }
-        title={props.userName + "\n" + props.time.split(' ')[0]}
+        title={<div><p>{props.userName}</p> <p style={{color:"LightGray"}}>{ props.time.split(' ')[0]}</p></div>}
         onClick={() => navigate(`/${props.uid}`)}
       />
       <CardMedia
