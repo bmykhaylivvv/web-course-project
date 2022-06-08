@@ -64,19 +64,28 @@ const Post = (props) => {
       <CardHeader
         avatar={
           <Avatar
-            sx={{ bgcolor: red[500], cursor: "pointer"}}
+            sx={{ bgcolor: red[500], cursor: "pointer" }}
             alt={props.userName}
             aria-label="post"
             src={userAvatar}
           />
         }
-        title={<div><p>{props.userName}</p> <p style={{color:"LightGray"}}>{ props.time?.split(' ')[0]}</p></div>}
+        title={
+          <div>
+            <p>{props.userName}</p>{" "}
+            <p style={{ color: "LightGray" }}>{props.time?.split(" ")[0]}</p>
+          </div>
+        }
         onClick={() => navigate(`/${props.uid}`)}
       />
       <CardMedia
         onClick={props.onPhotoClick}
         component="img"
-        sx={{ maxHeight: 400, objectFit: "contain", cursor: props.cursor === undefined ? "pointer" : "" }}
+        height="240"
+        sx={{
+          objectFit: "contain",
+          cursor: props.cursor === undefined ? "pointer" : "",
+        }}
         image={props.photo}
         alt="Photo"
       />
@@ -87,7 +96,7 @@ const Post = (props) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton
-          sx={{cursor: "pointer"}}
+          sx={{ cursor: "pointer" }}
           onClick={() => {
             setColor(color === "error" ? "default" : "error");
             if (color === "default") {
@@ -101,7 +110,10 @@ const Post = (props) => {
         </IconButton>
         <Typography>{likes.length}</Typography>
         {props.cuid === props.uid ? (
-          <IconButton sx={{ marginLeft: "80%", cursor: "pointer" }} onClick={deletePost}>
+          <IconButton
+            sx={{ marginLeft: "80%", cursor: "pointer" }}
+            onClick={deletePost}
+          >
             <DeleteIcon />
           </IconButton>
         ) : null}
