@@ -64,7 +64,7 @@ const Post = (props) => {
       <CardHeader
         avatar={
           <Avatar
-            sx={{ bgcolor: red[500] }}
+            sx={{ bgcolor: red[500], cursor: "pointer"}}
             alt={props.userName}
             aria-label="post"
             src={userAvatar}
@@ -76,7 +76,7 @@ const Post = (props) => {
       <CardMedia
         onClick={props.onPhotoClick}
         component="img"
-        sx={{ maxHeight: 400, objectFit: "contain" }}
+        sx={{ maxHeight: 400, objectFit: "contain", cursor: props.cursor === undefined ? "pointer" : "" }}
         image={props.photo}
         alt="Photo"
       />
@@ -87,6 +87,7 @@ const Post = (props) => {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton
+          sx={{cursor: "pointer"}}
           onClick={() => {
             setColor(color === "error" ? "default" : "error");
             if (color === "default") {
@@ -100,7 +101,7 @@ const Post = (props) => {
         </IconButton>
         <Typography>{likes.length}</Typography>
         {props.cuid === props.uid ? (
-          <IconButton sx={{ marginLeft: "80%" }} onClick={deletePost}>
+          <IconButton sx={{ marginLeft: "80%", cursor: "pointer" }} onClick={deletePost}>
             <DeleteIcon />
           </IconButton>
         ) : null}

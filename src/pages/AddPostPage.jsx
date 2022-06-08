@@ -103,7 +103,7 @@ const AddPostPage = () => {
         onChange={(e) => setPostText(e.target.value)}
       />
       {imageUrl ? (
-      <Button variant="contained" onClick={() => addNewPost()}>
+      <Button variant="contained" onClick={() => addNewPost()} sx={{cursor: "pointer"}}>
         Add post
       </Button>
       ) : null}

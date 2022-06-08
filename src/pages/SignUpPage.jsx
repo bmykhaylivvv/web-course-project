@@ -88,13 +88,13 @@ const SignUp = () => {
       <div className='signup-page-error'>
         {signUpError}
       </div>      <Button
-        sx={{ marginBottom: "10px" }}
+        sx={{ marginBottom: "10px", cursor: "pointer" }}
         variant="contained"
         onClick={() => signUpWithEmailAndPassword()}
       >
         Sign Up
       </Button>
-      <Button onClick={() => navigate("/signin")}>I have an account!</Button>
+      <Button sx={{cursor: "pointer"}} onClick={() => navigate("/signin")}>I have an account!</Button>
     </div>
   );
 };

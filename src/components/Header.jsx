@@ -98,6 +98,7 @@ const Header = () => {
               letterSpacing: ".3rem",
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer",
             }}
           >
             Metoo
@@ -116,6 +117,7 @@ const Header = () => {
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
+              sx={{cursor: "pointer"}}
             >
               <MenuIcon />
             </IconButton>
@@ -139,6 +141,7 @@ const Header = () => {
             >
               <MenuItem
                 key="Feed"
+                sx={{cursor: "pointer"}}
                 onClick={() => {
                   navigate("/feed");
                   handleCloseNavMenu();
@@ -148,6 +151,7 @@ const Header = () => {
               </MenuItem>
               <MenuItem
                 key="Add post"
+                sx={{cursor: "pointer"}}
                 onClick={() => {
                   navigate("/addpost");
                   handleCloseNavMenu();
@@ -181,23 +185,13 @@ const Header = () => {
               display: { xs: "none", md: "flex" },
             }}
           >
-            {/* <Button
-                key='Feed'
-                onClick={() => {
-                  navigate('/feed');
-                  handleCloseUserMenu();
-                }}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Feed
-              </Button> */}
             <Button
               key="Add post"
               onClick={() => {
                 navigate("/addpost");
                 handleCloseUserMenu();
               }}
-              sx={{ my: 2, color: "white", display: "block" }}
+              sx={{ my: 2, color: "white", display: "block", cursor: "pointer" }}
             >
               Add post
             </Button>
@@ -205,7 +199,7 @@ const Header = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, cursor: "pointer"}}>
                 <Avatar
                   alt={currentUserInfo?.username}
                   src={currentUserInfo?.avatarUrl}
@@ -229,6 +223,7 @@ const Header = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem
+                sx={{cursor: "pointer"}}
                 onClick={() => {
                   navigate("/profile");
                   handleCloseUserMenu();
@@ -237,6 +232,7 @@ const Header = () => {
                 <Typography textAlign="center">Profile</Typography>
               </MenuItem>
               <MenuItem
+                sx={{cursor: "pointer"}}
                 onClick={() => {
                   navigate("/addpost");
                   handleCloseUserMenu();
@@ -245,6 +241,7 @@ const Header = () => {
                 <Typography textAlign="center">Add post</Typography>
               </MenuItem>
               <MenuItem
+                sx={{cursor: "pointer"}}
                 onClick={() => {
                   logOut();
                   handleCloseUserMenu();

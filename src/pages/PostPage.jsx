@@ -131,6 +131,7 @@ const PostPage = () => {
           postKey={post.postId}
           likes={post.likes}
           time={post.time}
+          cursor={false}
           onUserClick={() => navigate(`/${post.postId}`)}
         />
       </Box>
@@ -165,7 +166,7 @@ const PostPage = () => {
             <Button
               variant="contained"
               component="span"
-              sx={{ width: "100%", height: "100%" }}
+              sx={{ width: "100%", height: "100%", cursor: "pointer" }}
               onClick={() => {
                 let comments = post.comments === "None" ? [] : post.comments;
                 const newComment = {

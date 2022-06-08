@@ -15,12 +15,11 @@ export default function Comments(props) {
           <div key={comment.commentId}>
             <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
-                <Avatar alt={comment.user.username} src={comment.user.avatarUrl} 
+                <Avatar sx={{cursor: "pointer"}} alt={comment.user.username} src={comment.user.avatarUrl} 
                 onClick={() => navigate(comment.user.userId === props.currUserId ? "/profile" : `/${comment.user.userId}`)}/>
                 </ListItemAvatar>
                 <ListItemText
                 primary={<div style={{width:"100%"}}><p style={{width:"70%", display: "inline-block"}}>{comment.user.username}</p> <p style={{color:"LightGray", float:'right', width:"20%", display: "inline-block"}}>{ comment.time.split(' ')[0]}</p></div>}
-                // <p>{props.userName}</p> <p style={{color:"LightGray"}}>{ props.time.split(' ')[0]}</p>
                 secondary={
                     <React.Fragment>
                     {comment.text}

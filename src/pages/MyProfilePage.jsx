@@ -142,7 +142,7 @@ const MyProfilePage = () => {
                 Upload photo
               </Button>
             </label>
-            <Button variant="contained" onClick={() => updateAvatar()}>
+            <Button variant="contained" onClick={() => updateAvatar()} sx={{cursor: "pointer"}}>
               Update profile photo
             </Button>
           </div>
@@ -157,6 +157,7 @@ const MyProfilePage = () => {
           >
             {userPosts.map((post) => (
               <ImageListItem
+                sx={{cursor: "pointer"}}
                 key={post.imageUrl}
                 onClick={() =>
                   navigate(`/${currentUserInfo?.username}/${post.postId}`)

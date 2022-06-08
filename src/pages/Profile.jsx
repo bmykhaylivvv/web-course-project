@@ -141,6 +141,7 @@ const Profile = () => {
               variant="contained"
               size="small"
               color={colorOfFollow}
+              sx={{cursor: "pointer"}}
               onClick={() => {
                 setColorOfFollow(
                   colorOfFollow === "success" ? "error" : "success"
@@ -194,6 +195,7 @@ const Profile = () => {
               <ImageListItem
                 key={post.imageUrl}
                 onClick={() => navigate(`/${username}/${post.postId}`)}
+                sx={{cursor: "pointer"}}
               >
                 <img
                   src={`${post.imageUrl}?w=164&h=164&fit=crop&auto=format`}

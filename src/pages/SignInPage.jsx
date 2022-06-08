@@ -67,13 +67,13 @@ const SignInPage = () => {
         {signInError}
       </div>
       <Button
-        sx={{ marginBottom: "10px" }}
+        sx={{ marginBottom: "10px", cursor: "pointer" }}
         variant="contained"
         onClick={() => logInWithEmailAndPassword()}
       >
         Sign In
       </Button>
-      <Button onClick={() => navigate("/signup")}>Create new account</Button>
+      <Button sx={{cursor: "pointer"}} onClick={() => navigate("/signup")}>Create new account</Button>
     </div>
   );
 };
