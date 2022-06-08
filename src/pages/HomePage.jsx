@@ -116,6 +116,7 @@ const Home = () => {
               cuid={firebaseAuth.currentUser.uid}
               postKey={post.postId}
               likes={post.likes}
+              time={post.time}
               onPhotoClick={() => navigate(`/${post.username}/${post.postId}`)}
             />
           ))}
