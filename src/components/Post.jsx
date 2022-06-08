@@ -76,7 +76,7 @@ const Post = (props) => {
             <p style={{ color: "LightGray" }}>{props.time?.split(" ")[0]}</p>
           </div>
         }
-        onClick={() => navigate(`/${props.uid}`)}
+        onClick={() => navigate(props.uid === props.cuid ? "/profile" : `/${props.uid}`)}
       />
       <CardMedia
         onClick={props.onPhotoClick}
